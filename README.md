@@ -4,6 +4,7 @@ TechStore S-GeForce
 🚀 Демо  
 :point_right:
 ![Главная страница](https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_main.png)  
+[Главная страница](https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_main.png)
 ![Каталог товаров](https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_catalog_all__page=2.png)
 
 🔧 Технологии
