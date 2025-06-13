@@ -1,3 +1,21 @@
+TechStore S-GeForce
+Интернет-магазин компьютерных комплектующих с возможностью просмотра товаров, оформления заказов и управления контентом через админ-панель.
+
+🚀 Демо
+![Главная страница] (https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_main.png)
+
+![Каталог товаров] (https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_catalog_all__page=2.png)
+
+🔧 Технологии
+Backend: Django 4.2
+
+Frontend: HTML5, CSS3, Bootstrap 5
+
+База данных: SQLite3
+
+Дополнительно: Django Crispy Forms, Django Debug Toolbar
+
+
 Сайт [Portfolio](https://bashlykov2005.github.io/Portfolio/) Башлыков Александр
  - HTML; CSS
  - Адаптив до 320px
@@ -6,13 +24,14 @@
 ---
 :point_right: [Смотреть здесь](https://bashlykov2005.github.io/Portfolio/)
 
-![Главная страница] (https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_main.png)
 
-![Каталог товаров] (https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_catalog_all__page=2.png)
 
 S-GeForce
-├─ app            # корневая папка
+
+├─ app # корневая папка
+
 ├─ carts          # карты товаров и др
+
 ├─ feedback      # обратная связь
 ├─ fixtures     # Исходные данные в формате JSON
 ├─ goods             # файлы товаров
