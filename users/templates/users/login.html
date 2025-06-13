@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-gradient-primary bg-dark py-4">
+                    <h2 class="fw-bold text-white text-center mb-0">Вход в аккаунт</h2>
+                </div>
+                <div class="card-body p-5">
+                    <form action="{% url 'user:login' %}" method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label for="id_username" class="form-label fw-medium">Логин или Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-person-fill"></i></span>
+                                <input type="text" class="form-control form-control-lg"
+                                       id="id_username" name="username"
+                                       value="{% if form.username.value %}{{ form.username.value }}{% endif %}"
+                                       placeholder="Ваш логин" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_password" class="form-label fw-medium">Пароль</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock-fill"></i></span>
+                                <input type="password" class="form-control form-control-lg"
+                                       id="id_password" name="password"
+                                       placeholder="Ваш пароль" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button">
+                                    <i class="bi bi-eye-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="submit" class="btn btn-dark btn-lg rounded-pill fw-bold py-2">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+                            </button>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'main:index' %}" class="btn btn-outline-secondary rounded-pill">
+                                <i class="bi bi-arrow-left me-1"></i>Назад
+                            </a>
+                            <a href="{% url 'user:registration' %}" class="text-decoration-none">
+                                Нет аккаунта? <span class="fw-bold text-primary">Зарегистрируйтесь</span>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container py-5 text-center">
+    <h2 class="mb-4">Вы уже авторизованы как {{ user.username }}</h2>
+    <a href="{% url 'main:index' %}" class="btn btn-dark">На главную</a>
+</div>
+{% endif %}
+
+<script>
+document.querySelector('.toggle-password')?.addEventListener('click', function() {
+    const passwordInput = document.getElementById('id_password');
+    const icon = this.querySelector('i');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.replace('bi-eye-fill', 'bi-eye-slash-fill');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.replace('bi-eye-slash-fill', 'bi-eye-fill');
+    }
+});
+</script>
+{% endblock %}

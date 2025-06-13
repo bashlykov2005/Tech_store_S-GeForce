@@ -1,0 +1,311 @@
+{% load static %}
+{% load goods_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static "deps/css/bootstrap/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/my_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/cap.css" %}">
+    <!-- Стиль footer-a для главной страницы -->
+    {% block css %}{% endblock %}
+    <!-- Favicons for different platforms -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "deps/favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "deps/favicon/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "deps/favicon/favicon-16x16.png" %}">
+    <link rel="manifest" href="{% static "deps/favicon/site.webmanifest" %}">
+
+    <title>{{ title }}</title>
+</head>
+
+<body>
+   <header>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <div class="container-fluid">
+                <!-- 1. Адаптированные кнопки -->
+                <div class="d-flex flex-wrap align-items-center">
+                    <a class="navbar-brand me-3 btn btn-outline-primary" href="{% url 'main:index' %}">
+                        <i class="bi bi-house-door"></i> Главная
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- 2. Выразительное меню каталога -->
+                        <li class="nav-item dropdown mx-1">
+                            <a class="nav-link dropdown-toggle btn btn-outline-warning" href="#" role="button"
+                                data-bs-toggle="dropdown">
+                                <i class="bi bi-list-ul"></i> Каталог
+                            </a>
+                            <ul class="dropdown-menu bg-dark">
+                                {% tag_categories as categories %}
+                                {% for category in categories %}
+                                    <li>
+                                        <a class="dropdown-item text-white bg-gradient"
+                                        href="{% url 'catalog:index' category.slug %}">
+                                            {{ category.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown mx-1">
+                            <a class="nav-link dropdown-toggle btn btn-outline-secondary" href="#" role="button"
+                                data-bs-toggle="dropdown">
+                                <i class="bi bi-info-circle"></i> Информация
+                            </a>
+                            <ul class="dropdown-menu bg-dark">
+                                <li>
+                                    <a class="dropdown-item text-white bg-gradient" href="#" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                                        <i class="bi bi-building"></i> О нас
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white bg-gradient" href="#" data-bs-toggle="modal" data-bs-target="#contactsModal">
+                                        <i class="bi bi-telephone"></i> Контакты
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white bg-gradient" href="#" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+                                        <i class="bi bi-envelope"></i> Написать нам
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- Фильтры -->
+                    <div class="d-flex align-items-center me-2">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle btn-dark" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="font-size: 1rem;">
+                                <i class="bi bi-funnel-fill me-1"></i>
+                            </button>
+                            <form action="{% if request.GET.q %}{% url 'catalog:search' %}{% elif request.resolver_match.url_name == 'index' or not request.resolver_match.kwargs or 'category_slug' not in request.resolver_match.kwargs %}{% url 'catalog:index' 'all' %}{% else %}{% url 'catalog:index' request.resolver_match.kwargs.category_slug %}{% endif %}"
+                                method="get" class="dropdown-menu bg-dark p-2" data-bs-theme="dark">
+                                <div class="form-check text-white mb-2">
+                                    <input class="form-check-input" type="checkbox" name="on_sale"
+                                        id="flexCheckDefault" value="on" {% if request.GET.on_sale == 'on' %}checked{% endif %}>
+                                    {% if request.GET.q %}
+                                        <input type="hidden" name="q" value="{{ request.GET.q }}">
+                                    {% endif %}
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Товары по акции
+                                    </label>
+                                </div>
+                                <p class="text-white mb-1">Сортировать:</p>
+                                <div class="form-check text-white mb-1">
+                                    <input class="form-check-input" type="radio" name="order_by"
+                                        id="flexRadioDefault1" value="default"
+                                        {% if not request.GET.order_by or request.GET.order_by == 'default' %}checked{% endif %}>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        По умолчанию
+                                    </label>
+                                </div>
+                                <div class="form-check text-white mb-1">
+                                    <input class="form-check-input" type="radio" name="order_by"
+                                        id="flexRadioDefault2" value="price"
+                                        {% if request.GET.order_by == 'price' %}checked{% endif %}>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        От дешевых к дорогим
+                                    </label>
+                                </div>
+                                <div class="form-check text-white mb-2">
+                                    <input class="form-check-input" type="radio" name="order_by"
+                                        id="flexRadioDefault3" value="-price"
+                                        {% if request.GET.order_by == '-price' %}checked{% endif %}>
+                                    <label class="form-check-label" for="flexRadioDefault3">
+                                        От дорогих к дешевым
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm w-100">Применить</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 3. Уменьшенное поле поиска -->
+                    <form class="d-flex search-form mx-2" role="search" action="{% url 'catalog:search' %}" method='get'>
+                        <input class="form-control search-input" type="search" name="q"
+                            placeholder="Поиск..." style="width: 70%;">
+                        <button class="btn btn-success ms-2" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+
+                    <!-- кнопки пользователя -->
+                    <div class="d-flex">
+                        {% if not user.is_authenticated %}
+                            <a class="btn btn-outline-light mx-1" href="{% url 'user:login' %}">
+                                <i class="bi bi-box-arrow-in-right"></i> Войти
+                            </a>
+                        {% else %}
+                            <div class="dropdown">
+                                <a class="btn btn-outline-info dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> Профиль
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end bg-dark">
+                                    <li>
+                                        <a class="dropdown-item text-white" href="{% url 'user:profile' %}">
+                                            <i class="bi bi-person-lines-fill"></i> Кабинет
+                                        </a>
+                                    </li>
+                                    {% if user.is_admin or user.is_staff %}
+                                    <li>
+                                        <a class="dropdown-item text-white" href="{% url 'admin:index' %}">
+                                            <i class="bi bi-shield-lock"></i> Админпанель
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="{% url 'user:logout' %}">
+                                            <i class="bi bi-box-arrow-right"></i> Выйти
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        <div class="container">
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="text-center mb-4">Корзина</h3>
+                                <div class="container" id="cart-items-container">
+                                    <!-- Разметка корзины -->
+                                    {% include "carts/includes/included_cart.html" %}
+                                    <!-- Закончилась разметка корзины -->
+                                </div>
+                                <a class="btn btn-dark" href="orders/create_order.html">
+                                    Оформить заказ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Модальное окно "О нас" -->
+        <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="aboutModalLabel"><i class="bi bi-building"></i> О компании S-GeForce</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h3 class="mt-2"><strong>Компания S-GeForce</strong></h3>
+                        <p class="py-3">
+                            Компания S-GeForce была основана в 2024 году.
+                            Мы — представляем официальную продукцию таких известных технологических гигантов
+                            как NVIDIA, Intel, Microsoft. Также мы сотрудничаем напрямую и через партнеров с
+                            такими известными игровыми кампаниями как Mail.Games, UbiSoft, Wargaming, Electronic Arts
+                            и Bethesda. Главный офис S-GeForce, шоурум с компьютерами и периферией, а также
+                            производственный центр расположены в городе xxxxxxx.
+                            Наша компания работает как с частными, так и с юридическими лицами.
+                            Мы осуществляем доставку комплектующих в любую точку мира и России.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно "Контакты" -->
+        <div class="modal fade" id="contactsModal" tabindex="-1" aria-labelledby="contactsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="contactsModalLabel"><i class="bi bi-telephone"></i> Контакты</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h3 class="mt-2"><strong>Техническая поддержка</strong></h3>
+                        <p class="py-3">
+                            Город: xxxxxxxxx, ул. xxxxxxxxxxxx, д.xx<br>
+                            Телефон: 8 (xxx)xxx-xx-xx.<br>
+                            Режим работы: Ежедневно с 10:00 до 21:00 по МСК
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно "Написать нам" -->
+        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="feedbackModalLabel"><i class="bi bi-envelope"></i> Обратная связь</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="feedbackForm" method="post" action="{% url 'feedback:send' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="id_name" class="form-label">Ваше имя</label>
+                                <input type="text" class="form-control bg-secondary text-white" id="id_name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_email" class="form-label">Email</label>
+                                <input type="email" class="form-control bg-secondary text-white" id="id_email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_message" class="form-label">Сообщение</label>
+                                <textarea class="form-control bg-secondary text-white" id="id_message" name="message" rows="4" required></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" form="feedbackForm" class="btn btn-primary">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+                {% include "includes/notifications.html" %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </section>
+
+    {% block footer %}{% endblock %}
+
+    <script src="{% static "deps/js/jquery/jquery-3.7.0.min.js" %}"></script>
+    <script src="{% static "deps/js/jquery-events.js" %}"></script>
+    <script src="{% static "deps/js/jquery-ajax.js" %}"></script>
+    <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
+</body>
+
+</html>

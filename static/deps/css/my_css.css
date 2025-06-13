@@ -1,0 +1,229 @@
+body {
+  background-image: url("../images/bg-image.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+  height: 100%;
+}
+
+.dropdown-toggle::after {
+  content: none;
+}
+
+.custom-shadow {
+  box-shadow: 5px 5px 25px 19px #000000;
+}
+
+.product_id {
+  color: gray;
+  font-size: 15px;
+}
+
+.badge.bg-warning.text-dark {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  z-index: 1;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 1rem;
+  box-shadow: 2px 2px 15px 9px #000000;
+}
+
+.badge-banner {
+  top: 80%;
+  border-radius: 15px;
+  font-size: 0.7rem;
+}
+.min-vh-50 {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Стили для заголовков */
+.section-title {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.3), transparent);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+.out-of-stock {
+  opacity: 0.7;
+  filter: grayscale(30%);
+}
+
+/* Адаптивные общие стили */
+@media (max-width: 992px) {
+  .search-form {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .search-input {
+    width: 100% !important;
+  }
+
+  .navbar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .nav-item {
+    margin: 5px 0;
+  }
+}
+
+/* Эффекты при наведении */
+.dropdown-item.bg-gradient {
+  background: linear-gradient(90deg, transparent, #444);
+  transition: all 0.3s;
+}
+
+.dropdown-item.bg-gradient:hover {
+  background: linear-gradient(90deg, transparent, #666);
+  padding-left: 20px;
+}
+
+.btn-outline-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Стили для карточки */
+.card {
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Стиль для кнопки корзины */
+.cart-btn {
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-btn:hover {
+  background-color: #198754 !important;
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Стиль для бейджа скидки */
+.discount-badge {
+  z-index: 1;
+}
+
+/* Анимация при наведении на картинку */
+.card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.03);
+}
+
+/* Показываем ID при наведении на карточку */
+.card:hover .product-id {
+  opacity: 1;
+}
+
+/* Эффект для ссылок */
+a.text-decoration-none:hover h5 {
+  color: #0d6efd !important;
+  text-decoration: underline;
+}
+
+/* Адаптивные стили для карты товара */
+@media (max-width: 992px) {
+  #productCard {
+    height: auto !important;
+  }
+
+  .carousel {
+    height: 300px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    height: 250px !important;
+  }
+}
+
+/* Кастомные стили для карты товара */
+.cursor-zoom {
+  cursor: zoom-in;
+  transition: transform 0.3s;
+}
+
+.cursor-zoom:hover {
+  transform: scale(1.02);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.card {
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  border: none;
+  transition: all 0.3s;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.d-flex.gap-2>* {
+  margin-right: 0.5rem;
+}
+
+.d-flex.gap-2>*:last-child {
+  margin-right: 0;
+}
+
+#favoriteBtn:hover .bi-heart {
+  color: #dc3545 !important;
+}
+.z-index-1 {
+  z-index: 1;
+}
+
+.z-index-2 {
+  z-index: 2;
+}
+/* окно профиля */
+.avatar-upload {
+  position: relative;
+  max-width: 150px;
+  margin: 0 auto;
+}
+
+.btn-rounded {
+  border-radius: 50px;
+}
+
+@media print {
+  body {
+    background-attachment: scroll !important;
+    background-size: 100% 100% !important;
+    height: auto !important;
+  }
+}
