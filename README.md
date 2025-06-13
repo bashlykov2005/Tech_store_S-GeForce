@@ -5,7 +5,8 @@
  - Videofon для шапки, оптимизация графики, ссылки кнопок
 ---
 :point_right: [Смотреть здесь](https://bashlykov2005.github.io/Portfolio/)
-![Главная страница] (https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_main.png?raw=true)
+
+![Главная страница] (https://github.com/bashlykov2005/Tech_store_S-GeForce/blob/main/screenshots/127.0.0.1_8000_main.png)
 ![Каталог товаров] ()
 S-GeForce
 ├─ app            # корневая папка
