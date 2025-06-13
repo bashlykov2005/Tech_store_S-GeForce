@@ -1,0 +1,230 @@
+[
+{
+  "model": "goods.products",
+  "pk": 1,
+  "fields": {
+    "name": "NVIDIA GeForce RTX 4090",
+    "slug": "nvidia-geforce-rtx-4090",
+    "description": "Тип памяти: GDDR6X,\r\nОбъем видеопамяти: 24576 МБ,\r\nРазрядность шины памяти: 384бит,\r\nТип подключения: PCI Express 4.0",
+    "full_specs": "",
+    "image": "goods_images/RTX4090.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "277190.00",
+    "discount": "10.00",
+    "quantity": 4,
+    "category": 4,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 2,
+  "fields": {
+    "name": "ASUS TUF z270 Mark 2",
+    "slug": "asus-tuf-z270-mark-2",
+    "description": "Форм-фактор: ATX,\r\nСокет: LGA1151,\r\nЧипсет: Intel Z270,\r\nТип памяти: DDR4 DIMM,\r\nМаксимальная частота памяти: 3866 МГц",
+    "full_specs": "",
+    "image": "goods_images/Z270.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "11900.00",
+    "discount": "0.00",
+    "quantity": 7,
+    "category": 5,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 3,
+  "fields": {
+    "name": "Intel Core i9-12900K LGA1700",
+    "slug": "intel-core-i9-12900k-lga1700",
+    "description": "Сокет: LGA1700\r\nТип памяти: DDR4, DDR5\r\nКоличество ядер: 16 шт,\r\nЧастота процессора: 3200 МГц",
+    "full_specs": "",
+    "image": "goods_images/12900K.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "46000.00",
+    "discount": "12.00",
+    "quantity": 14,
+    "category": 6,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 4,
+  "fields": {
+    "name": "КG.SKILL Trident Z Royal",
+    "slug": "kgskill-trident-z-royal",
+    "description": "Количество модулей в комплекте: 4шт.,\r\nОбъем одного модуля: 16ГБ,\r\nТактовая частота: 4000 МГц,\r\nТип: DDR4 DIMM 288-pin",
+    "full_specs": "",
+    "image": "goods_images/Gskill.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "63900.00",
+    "discount": "5.00",
+    "quantity": 2,
+    "category": 7,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 5,
+  "fields": {
+    "name": "Thermaltake Toughpower PF1",
+    "slug": "thermaltake-toughpower-pf1",
+    "description": "Мощность: 850 Вт, 80 PLUS PLATINUM,\r\nФорм-фактор: ATX, 12V v2.31,\r\nРазъемы: MB 24 pin, CPU 2x(4+4) pin",
+    "full_specs": "",
+    "image": "goods_images/TF1.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "26550.00",
+    "discount": "0.00",
+    "quantity": 11,
+    "category": 8,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 6,
+  "fields": {
+    "name": "Noctua NH-D15",
+    "slug": "noctua-nh-d15",
+    "description": "Количество вентиляторов: 2,\r\nРазмер вентилятора, мм: 140,\r\nМинимальная и минимальная скорость вращения, об/мин: 300-1500",
+    "full_specs": "",
+    "image": "goods_images/noctua.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "23400.00",
+    "discount": "5.00",
+    "quantity": 0,
+    "category": 9,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 7,
+  "fields": {
+    "name": "MSI GeForce RTX 3080 Gaming X",
+    "slug": "msi-geforce-rtx-3080-gaming-x-trio-10gb",
+    "description": "Тип памяти: GDDR6X,\r\nОбъем видеопамяти: 10240 МБ,\r\nРазрядность шины памяти: 320 бит,\r\nТип подключения: PCI Express 4.0",
+    "full_specs": null,
+    "image": "goods_images/Msi3090Ti.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "80600.00",
+    "discount": "1.00",
+    "quantity": 1,
+    "category": 4,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 8,
+  "fields": {
+    "name": "KFA2 GeForce RTX 3060 white",
+    "slug": "kfa2-geforce-rtx-3060-white",
+    "description": "Тип памяти: GDDR6,\r\nОбъем видеопамяти: 12288 МБ,\r\nРазрядность шины памяти: 192 бит,\r\nТип подключения: PCI Express 4.0",
+    "full_specs": "",
+    "image": "goods_images/Kfa2_3060.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "38699.00",
+    "discount": "0.00",
+    "quantity": 8,
+    "category": 4,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 9,
+  "fields": {
+    "name": "AMD Ryzen 5 5600x",
+    "slug": "amd-ryzen-5-5600x",
+    "description": "Сокет: AM4,\r\nТип памяти: DDR4,\r\nКоличество ядер: 6 шт.,\r\nЧастота процессора: 3700 МГц",
+    "full_specs": "",
+    "image": "goods_images/Ryzen-5-5600X.jpeg",
+    "image1": "",
+    "image2": "",
+    "price": "16690.00",
+    "discount": "9.00",
+    "quantity": 3,
+    "category": 6,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 10,
+  "fields": {
+    "name": "Kingston FURY Renegade 32 GB",
+    "slug": "kingston-fury-renegade-32-gb",
+    "description": "Количество модулей в комплекте: 4 шт,\r\nОбъем одного модуля: 8 ГБ,\r\nТип: DDR4 DIMM 288-pin,\r\nТактовая частота: 3600 МГц",
+    "full_specs": "",
+    "image": "goods_images/FuryRenegade32gb.jpg",
+    "image1": "",
+    "image2": "",
+    "price": "13300.00",
+    "discount": "0.00",
+    "quantity": 5,
+    "category": 7,
+    "created_at": "2025-06-08T15:08:02.829Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 11,
+  "fields": {
+    "name": "Thermaltake Toughpower GF A3 850W",
+    "slug": "thermaltake-toughpower-gf-a3-850w",
+    "description": "Мощность - 850 Вт; Стандарт  -ATX12V 3.0; PFC  - активный; Размер вентилятора -120 мм; Цвета - чёрный; Размеры - 140 x 86 x 150 мм",
+    "full_specs": "",
+    "image": "goods_images/5964646.webp",
+    "image1": "goods_images/5964645.webp",
+    "image2": "goods_images/5964644.webp",
+    "price": "4580.00",
+    "discount": "0.00",
+    "quantity": 7,
+    "category": 8,
+    "created_at": "2025-06-10T16:50:20.366Z",
+    "favorites": []
+  }
+},
+{
+  "model": "goods.products",
+  "pk": 12,
+  "fields": {
+    "name": "Накопитель SSD 1Tb Samsung 990 PRO",
+    "slug": "nakopitel-ssd-1tb-samsung-990-pro",
+    "description": "Тип  - SSD\r\nФорм-фактор  - M.2\r\nИнтерфейс  - PCI-E 4.0 x4\r\nПоддержка NVMe  - да\r\nОбъём накопителя  - 1000 Гб\r\nТип флэш-памяти  - TLC\r\nОбъём кэш памяти  - 1024 Мб, Low Power DDR4\r\nСкорость чтения  - 7450 МБ/сек\r\nСкорость записи  - 6900 МБ/сек",
+    "full_specs": "",
+    "image": "goods_images/716_1.webp",
+    "image1": "goods_images/716.webp",
+    "image2": "goods_images/716_2.webp",
+    "price": "11790.00",
+    "discount": "2.00",
+    "quantity": 12,
+    "category": 10,
+    "created_at": "2025-06-10T16:58:37.799Z",
+    "favorites": []
+  }
+}
+]

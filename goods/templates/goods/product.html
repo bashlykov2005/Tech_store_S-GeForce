@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static %}
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Сообщение о добавлении в избранное -->
+    <div id="favoriteAlert" class="alert alert-success alert-dismissible fade show d-none position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1100;">
+        <span id="favoriteMessage"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Сообщение о добавлении в корзину (скрыто по умолчанию) -->
+    <div id="successMessage" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+        <strong>Товар добавлен в корзину!</strong> Вы будете перенаправлены на страницу покупок.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Основная карточка товара -->
+    <div id="productCard" class="card mb-4 border-0 shadow-lg rounded-4 overflow-hidden" style="height: 520px; max-width: 95%; margin: 0 auto;">
+        <!-- ID товара -->
+        <div class="position-absolute top-0 start-0 m-3">
+            <span class="badge bg-dark bg-opacity-75 text-white px-3 py-2">
+                ID: {{ product.display_id }}
+            </span>
+        </div>
+
+        <!-- Бейдж скидки -->
+        {% if product.discount %}
+        <div class="position-absolute top-0 end-0 m-3">
+            <span class="badge bg-success bg-gradient fs-6 fw-light px-3 py-2"
+                  style="text-shadow: 0 1px 1px rgba(0,0,0,0.2); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <i class="bi bi-arrow-down-circle me-1"></i> {{ product.discount }}% Скидка
+            </span>
+        </div>
+        {% endif %}
+
+        <div class="row g-0 h-100">
+            <!-- Миниатюра и галерея -->
+            <div class="col-lg-5 col-md-12 position-relative h-100">
+                <!-- Основное изображение с каруселью -->
+                <div id="productCarousel" class="carousel slide h-75" data-bs-ride="carousel">
+                    <div class="carousel-inner h-100">
+                        {% for image in product.get_images %}
+                        <div class="carousel-item h-100 {% if forloop.first %}active{% endif %}">
+                            <img src="{{ image }}"
+                                 class="d-block w-100 h-100 object-fit-cover cursor-zoom"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#imageModal{{ product.id }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                <!-- Миниатюры -->
+                <div class="row mt-2 g-2">
+                    {% for image in product.get_images %}
+                    <div class="col-4">
+                        <img src="{{ image }}"
+                             class="img-thumbnail cursor-pointer w-100 h-100 object-fit-cover"
+                             style="height: 80px;"
+                             data-bs-target="#productCarousel"
+                             data-bs-slide-to="{{ forloop.counter0 }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Основная информация -->
+            <div class="col-lg-7 col-md-12">
+                <div class="card-body h-100 d-flex flex-column p-3 p-md-4">
+                    <div class="mb-auto">
+                        <h3 class="card-title fw-bold mb-2">{{ product.name }}</h3>
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="fs-4 fw-bold text-dark me-2">{{ product.sell_price }} ₽</span>
+                            {% if product.discount %}
+                            <span class="text-decoration-line-through text-muted">{{ product.price }} ₽</span>
+                            {% endif %}
+                        </div>
+                        <p class="card-text text-secondary">{{ product.description }}</p>
+
+                        <!-- Ссылка на полные характеристики -->
+                        <a href="#fullSpecs" class="text-primary text-decoration-none" data-bs-toggle="collapse">
+                            <i class="bi bi-chevron-down"></i> Смотреть полные характеристики
+                        </a>
+
+                        <!-- Полные характеристики -->
+                        <div id="fullSpecs" class="collapse mt-3">
+                            <div class="card card-body">
+                                {{ product.full_specs|default:product.description|linebreaks }}
+                                <p><strong>Количество на складе:</strong> {{ product.quantity }} шт.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Кнопки -->
+                    <div class="mt-auto d-flex gap-2">
+                        {% if product.is_available %}
+                        <a href="{% url 'cart:cart_add' product.slug %}"
+                        class="btn btn-success btn-lg w-100 py-2 rounded-3 d-flex align-items-center justify-content-center"
+                        id="addToCartBtn">
+                            <i class="bi bi-cart-plus-fill me-2"></i> Добавить в корзину
+                        </a>
+                        {% else %}
+                        <button class="btn btn-secondary btn-lg w-100 py-2 rounded-3" disabled>
+                            <i class="bi bi-cart-x-fill me-2"></i> Товар закончился
+                        </button>
+                        {% endif %}
+
+                        <button onclick="window.history.back()"
+                                class="btn btn-outline-secondary btn-lg rounded-3 d-flex align-items-center justify-content-center"
+                                style="color: #dc3545; border-color: #dc3545;">
+                            <i class="bi bi-x-circle me-2"></i> Отменить
+                        </button>
+
+                        <!-- Кнопка избранного -->
+
+                        <button class="btn btn-outline-primary btn-lg py-2 rounded-3 d-flex align-items-center justify-content-center favorite-btn"
+                                id="favoriteBtn"
+                                data-product-id="{{ product.id }}">
+                            <i class="bi bi-heart{% if request.user in product.favorites.all %}-fill text-danger{% endif %} me-2"></i>
+                            <span class="d-none d-sm-inline">Избранное</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно изображения -->
+    <div class="modal fade" id="imageModal{{ product.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content border-0">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">{{ product.name }}</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="{{ product.image.url }}" class="img-fluid w-100" alt="{{ product.name }}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // обработчик избранного
+document.getElementById('favoriteBtn')?.addEventListener('click', function() {
+    const productId = this.dataset.productId;
+    const icon = this.querySelector('i');
+
+    fetch(`/goods/toggle_favorite/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network error');
+        return response.json();
+    })
+    .then(data => {
+        console.log("Server response:", data);
+        if (data.status === 'added') {
+            icon.classList.replace('bi-heart', 'bi-heart-fill');
+            icon.classList.add('text-danger');
+            showAlert('Товар добавлен в избранное');
+        } else {
+            icon.classList.replace('bi-heart-fill', 'bi-heart');
+            icon.classList.remove('text-danger');
+            showAlert('Товар удален из избранного');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Ошибка при обновлении избранного');
+    });
+});
+
+function showAlert(message) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-success position-fixed top-0 start-50 translate-middle-x mt-3';
+    alert.textContent = message;
+    document.body.appendChild(alert);
+
+    setTimeout(() => {
+        alert.remove();
+    }, 3000);
+}
+</script>
+{% endblock %}

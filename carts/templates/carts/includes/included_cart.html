@@ -1,0 +1,144 @@
+{% load static %}
+{% load carts_tags %}
+{% user_carts request as carts %}
+<div class="cart-container">
+    {% for cart in carts %}
+        <div class="card mb-3 text-bg-light shadow-sm">
+            <div class="card-header bg-light">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        {% if cart.product.image %}
+                            <img src="{{ cart.product.image.url }}"
+                                 alt="{{ cart.product.name }}"
+                                 class="img-thumbnail"
+                                 style="max-width: 60px; height: auto;">
+                        {% else %}
+                            <div class="img-thumbnail d-flex align-items-center justify-content-center"
+                                 style="width: 60px; height: 60px; background-color: #eee;">
+                                <i class="bi bi-image text-muted"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-10">
+                        <h5 class="card-title mb-0">{{ cart.product.name }}</h5>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-light">
+                    <div class="row text-center align-items-center">
+                        <div class="col-md-3 p-0">
+                            <div class="input-group justify-content-center">
+                                <span class="input-group-text">Кол-во:</span>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-sm btn-outline-secondary decrease-quantity"
+                                            data-cart-id="{{ cart.id }}"
+                                            style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                        <i class="bi bi-dash"></i>
+                                    </button>
+                                    <input type="text" class="form-control number text-center quantity-input"
+                                           value="{{ cart.quantity }}" readonly
+                                           style="max-width: 50px; border-radius: 0;">
+                                    <button class="btn btn-sm btn-outline-secondary increase-quantity"
+                                            data-cart-id="{{ cart.id }}"
+                                            style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 p-0">
+                            <p class="mb-0">Цена: {{ cart.product.sell_price }} ₽</p>
+                        </div>
+                        <div class="col-md-3 p-0">
+                            <p class="mb-0"><strong>Итого: <span class="product-total" data-cart-id="{{ cart.id }}">{{ cart.products_price }}</span> ₽</strong></p>
+                        </div>
+                        <div class="col-md-3 p-0">
+                            <a href="{% url "cart:cart_remove" cart.id %}"
+                               class="btn btn-outline-danger remove-from-cart"
+                               data-cart-id="{{ cart.id }}">
+                                <i class="bi bi-trash"></i> Удалить
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="card mt-4 shadow-sm">
+    <div class="card-footer bg-light">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="mb-0">Итого <strong class="total-quantity">{{ carts.total_quantity }}</strong> товар(а)</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <h4 class="mb-0"><strong class="grand-total">{{ carts.total_price }}</strong> ₽</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Функция для обновления количества
+    async function updateQuantity(cartId, change) {
+        try {
+            // Проверка возможности увеличения
+            if (change > 0) {
+                const canIncrease = await fetch(`/carts/can_increase/${cartId}/`)
+                    .then(res => res.json())
+                    .then(data => data.can_increase);
+
+                if (!canIncrease) {
+                    alert('Достигнуто максимальное доступное количество');
+                    return;
+                }
+            }
+
+            // Обновление количества
+            const response = await fetch(`/carts/cart_update/${cartId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity: change })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                const input = document.querySelector(`input[data-cart-id="${cartId}"]`);
+                const productTotal = document.querySelector(`.product-total[data-cart-id="${cartId}"]`);
+                const totalQuantity = document.querySelector('.total-quantity');
+                const grandTotal = document.querySelector('.grand-total');
+
+                if (input) input.value = data.new_quantity;
+                if (productTotal) productTotal.textContent = data.product_total;
+                if (totalQuantity) totalQuantity.textContent = data.total_quantity;
+                if (grandTotal) grandTotal.textContent = data.grand_total;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    // Обработчики кнопок
+    document.querySelectorAll('.increase-quantity').forEach(button => {
+        button.addEventListener('click', () => {
+            const cartId = button.getAttribute('data-cart-id');
+            updateQuantity(cartId, 1);
+        });
+    });
+
+    document.querySelectorAll('.decrease-quantity').forEach(button => {
+        button.addEventListener('click', () => {
+            const cartId = button.getAttribute('data-cart-id');
+            updateQuantity(cartId, -1);
+        });
+    });
+});
+</script>

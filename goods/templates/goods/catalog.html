@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+{% load goods_tags %}
+
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
+
+
+{% block content %}
+    <div class="row">
+        <!-- Форма фильтров -->
+        {% comment %} <div class="dropdown mb-2">
+            <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false" style="font-size: 1.1rem;">
+                <i class="bi bi-funnel-fill me-2"></i>Фильтры
+            </button>
+
+            <form action="{% if request.GET.q %}{% url "catalog:search" %}{% else %}{% url "catalog:index" slug_url %}{% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                <div class="form-check text-white mx-3">
+                    <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on" {% if request.GET.on_sale == 'on' %}checked{% endif %}>
+                    {% if request.GET.q %}
+                        <input type="hidden" name="q" value="{{ request.GET.q }}">
+                    {% endif %}
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Товары по акции
+                    </label>
+                </div>
+                <p class="text-white mx-3 mt-3">Сортировать:</p>
+                <div class="form-check text-white mx-3">
+                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default"
+                    {% if not request.GET.order_by or request.GET.order_by == 'default' %}checked{% endif %}>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        По умолчанию
+                    </label>
+                </div>
+                <div class="form-check text-white mx-3">
+                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price"
+                    {% if request.GET.order_by == 'price' %}checked{% endif %}>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        От дешевых к дорогим
+                    </label>
+                </div>
+                <div class="form-check text-white mx-3">
+                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault3" value="-price"
+                    {% if request.GET.order_by == '-price' %}checked{% endif %}>
+                    <label class="form-check-label" for="flexRadioDefault3">
+                        От дорогих к дешевым
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary mx-3 mt-3">Применить</button>
+            </form>
+        </div> {% endcomment %}
+
+        {% if request.GET.q %}
+            <h3 class="mt-4 text-white">Результаты поиска по запросу "{{ request.GET.q }}"</h3>
+            {% if not goods %}
+                <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+                <h4 class="mt-4 text-white">По запросу ничего не найдено</h4>
+            {% endif %}
+        {% elif not goods %}
+            <div class="min-vh-50"> <!-- Добавляем контейнер с минимальной высотой, чтобы футер не налезал -->
+            <h2 class="mb-5 pb-5 text-white">Товары в этой категории временно отсутствуют</h2>
+        {% endif %}
+        {% for product in goods %}
+            <!-- Карта товара -->
+            <div class="col-lg-4 col-md-6 p-4">
+                <div class="card border-1 border-light rounded-4 overflow-hidden shadow-sm position-relative"
+                    style="transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <!-- Бейдж скидки (перенесен влево) -->
+                    {% if product.discount %}
+                    <div class="discount-badge position-absolute top-0 start-0 m-3">
+                        <span class="badge bg-success bg-opacity-90 text-white fw-normal px-3 py-2"
+                            style="font-size: 0.9rem; backdrop-filter: blur(5px); box-shadow: 0 2px 8px rgba(0,100,0,0.3);">
+                            <i class="bi bi-arrow-down-right me-1"></i> Экономия {{ product.discount }}%
+                        </span>
+                    </div>
+                    {% endif %}
+
+                    <!-- Картинка товара с ссылкой -->
+                    <a href="{% url 'catalog:product' product.slug %}" class="text-decoration-none">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top object-fit-cover" alt="{{ product.name }}" style="height: 200px;">
+                        {% else %}
+                            <img src="{% static 'deps/images/Not found image.jpg' %}" class="card-img-top object-fit-cover" alt="Изображение отсутствует" style="height: 200px;">
+                        {% endif %}
+                    </a>
+
+                    <div class="card-body p-3">
+                        <a href="{% url 'catalog:product' product.slug %}" class="text-decoration-none">
+                            <h5 class="card-title text-dark mb-2">{{ product.name }}</h5>
+                        </a>
+                        <p class="card-text text-muted small mb-3">{{ product.description|truncatechars:60 }}</p>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price-block">
+                                {% if product.discount %}
+                                    <span class="text-danger"><s>{{ product.price }} ₽</s></span>
+                                    <span class="fs-5 fw-bold text-success ms-2">{{ product.sell_price }} ₽</span>
+                                {% else %}
+                                    <span class="fs-5 fw-bold text-dark">{{ product.price }} ₽</span>
+                                {% endif %}
+                            </div>
+
+                            <a href="{% url 'cart:cart_add' product.slug %}" class="btn btn-success rounded-circle p-2 cart-btn"
+                            style="width: 42px; height: 42px;">
+                                <i class="bi bi-cart-plus fs-5 text-white"></i>
+                            </a>
+                        </div>
+
+                        <!-- товар с = 0 -->
+                        {% if product.quantity == 0 %}
+                            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center">
+                                <span class="badge bg-danger fs-5">Нет в наличии</span>
+                            </div>
+                        {% endif %}
+
+                        <!-- ID товара (появляется при наведении) -->
+                        <div class="product-id mt-2 small text-muted opacity-0"
+                            style="transition: opacity 0.3s ease; height: 18px;">
+                            ID: {{ product.display_id }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Пагинация -->
+    {% if goods %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center my-4">
+                <div class="custom-shadow d-flex">
+                    <li class="page-item {% if not goods.has_previous %}disabled{% endif %}">
+                    <a class="page-link" href="{% if goods.has_previous %}?{% change_params page=goods.previous_page_number %}{% else %}#{% endif %}">&#129152;</a>
+                    </li>
+
+                    {% for page in goods.paginator.page_range %}
+                        {% if page >= goods.number|add:-2 and page <= goods.number|add:2 %}
+                            <li class="page-item {%if goods.number == page %} active {% endif %}">
+                                <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="page-item {% if not goods.has_next %}disabled{% endif %}">
+                        <a class="page-link" href="{% if goods.has_next %}?{% change_params page=goods.next_page_number %}{% else %}#{% endif %}">&#129154;</a>
+                        </li>
+                </div>
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}
+
+{% block footer %}
+    <footer class="py-4 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">© 2024 S-GeForce  Все права защищены.</p>
+        </div>
+    </footer>
+{% endblock %}

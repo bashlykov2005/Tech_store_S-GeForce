@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+{% endblock %}
+
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
+
+{% block content %}
+    <div class="text-bg-light bg-opacity-50 rounded">
+        <h1 class="py-1 m-2 text-center"><strong>{{ content }}</strong></h1>
+        <h1 class="py-1 m-2 text-center"><strong>{{ content2 }}</strong></h1>
+        <h2 class="py-1 m-2 text-center text-dark"><em>{{ slogan }}</em></h2>
+    </div>
+    <!-- Карточки товаров на главной -->
+    <div class="row mt-1">
+        <!-- Лучшая цена -->
+        <div class="col-md-4">
+            <h3 class="section-title text-center mb-3">Лучшая цена</h3>
+            {% if best_price %}
+                {% include "goods/includes/product_card.html" with product=best_price %}
+            {% else %}
+                <div class="alert alert-info">Нет товаров со скидкой</div>
+            {% endif %}
+        </div>
+
+        <!-- Новинка недели -->
+        <div class="col-md-4">
+            <h3 class="section-title text-center mb-3">Новинка недели</h3>
+            {% if new_week %}
+                {% include "goods/includes/product_card.html" with product=new_week %}
+            {% else %}
+                <div class="alert alert-info">Нет новых товаров</div>
+            {% endif %}
+        </div>
+
+        <!-- Скоро закончится -->
+        <div class="col-md-4">
+            <h3 class="section-title text-center mb-3">Скоро закончится</h3>
+            {% if ending_soon %}
+                {% include "goods/includes/product_card.html" with product=ending_soon %}
+            {% else %}
+                <div class="alert alert-info">Нет товаров с ограниченным количеством</div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <footer class="py-2 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">© 2024 S-GeForce Все права защищены.</p>
+        </div>
+    </footer>
+{% endblock %}
