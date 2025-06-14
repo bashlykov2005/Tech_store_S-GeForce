@@ -19,7 +19,7 @@
    
 ### 🔧 Технологии  
 Backend: <u>**Django 4.2**</u>  
-Frontend: <u>**HTML5, CSS3, Bootstrap 5**</u>  
+Frontend: <u>**HTML5, CSS3, Bootstrap 5. JavaScript**</u>  
 База данных: <u>**SQLite3**</u>  
 Дополнительно: <u>**Django Debug Toolbar**</u>  
 
